@@ -16,7 +16,7 @@ public class ShardPolicyFactories {
 
         @Override
         public String getName() {
-            return "jedis";
+            return "ketama";
         }
     }
 

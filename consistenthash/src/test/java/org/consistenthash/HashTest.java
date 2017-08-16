@@ -17,16 +17,21 @@ public class HashTest {
 				ShardNode.builder().host("66").port(22).build(),
 				ShardNode.builder().host("77").port(22).build()
 				);
-		KetamaHashing<ShardNode> kahsh = new KetamaHashing<ShardNode>(shards, new MurmurHash());
-//		int i = 0;
-//		for ( Entry<Long, AtomicReference<ShardNode>> n : kahsh.getNodes().entrySet()) {
-//			ShardNode v = n.getValue().get();
-//			if (v.getHost().equals("22") || v.getHost().equals("33"))
-//			System.err.println(n.getKey() +" "+ v +" "+ (++i));
-//		}
+		
+		String hashAlgo = "murmurhash";
+        Hashing hashing = Providers.locateHashing(hashAlgo);
+        if (hashing == null) {
+            throw new IllegalArgumentException("hashAlgo '" + hashAlgo + "' not found");
+        }
+        String shardAlgo = "ketama";
+        ShardPolicyFactory shardPolicyFactory = Providers.locateShardPolicyFactory(shardAlgo);
+        if (shardPolicyFactory == null) {
+            throw new IllegalArgumentException("shardAlgo '" + shardAlgo + "' not found.");
+        }
+		ShardPolicy<ShardNode> shardPolicy = shardPolicyFactory.createShardPolicy(shards, hashing);
 		Charset charset = Charset.forName("utf-8");
-		ShardNode dd = kahsh.getShardInfo("wwwjdcom11534".getBytes(charset));
-		System.out.println("look "+ dd +" "+ new MurmurHash().hash("wwwjdcom11534"));
+		ShardNode dd = shardPolicy.getShardInfo("wwwjdcom11534".getBytes(charset));
+		System.out.println("look "+ dd +" "+ hashing.hash("wwwjdcom11534"));
 
 	}
 }

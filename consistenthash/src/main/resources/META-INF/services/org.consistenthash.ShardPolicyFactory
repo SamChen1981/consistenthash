@@ -1,0 +1,2 @@
+org.consistenthash.ShardPolicyFactories$KetamaHashingFactory     #jedis compatible Consistent Hashing
+org.consistenthash.ShardPolicyFactories$ModShardPolicyFactory    #mod shard
