@@ -1,6 +1,5 @@
 package org.consistenthash;
 
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,8 +28,7 @@ public class HashTest {
             throw new IllegalArgumentException("shardAlgo '" + shardAlgo + "' not found.");
         }
 		ShardPolicy<ShardNode> shardPolicy = shardPolicyFactory.createShardPolicy(shards, hashing);
-		Charset charset = Charset.forName("utf-8");
-		ShardNode dd = shardPolicy.getShardInfo("wwwjdcom11534".getBytes(charset));
+		ShardNode dd = shardPolicy.getShardInfo(SafeEncoder.encode("wwwjdcom11534"));
 		System.out.println("look "+ dd +" "+ hashing.hash("wwwjdcom11534"));
 
 	}
