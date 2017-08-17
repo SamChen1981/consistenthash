@@ -17,6 +17,13 @@ public class HashTest {
 				ShardNode.builder().host("77").port(22).build()
 				);
 		
+		List<MyShard> myShards = Arrays.asList(
+				new MyShard("shard1"),
+				new MyShard("shard2"),
+				new MyShard("shard3")
+				
+				);
+		
 		String hashAlgo = "murmurhash";
         Hashing hashing = Providers.locateHashing(hashAlgo);
         if (hashing == null) {
@@ -27,9 +34,31 @@ public class HashTest {
         if (shardPolicyFactory == null) {
             throw new IllegalArgumentException("shardAlgo '" + shardAlgo + "' not found.");
         }
-		ShardPolicy<ShardNode> shardPolicy = shardPolicyFactory.createShardPolicy(shards, hashing);
-		ShardNode dd = shardPolicy.getShardInfo(SafeEncoder.encode("wwwjdcom11534"));
-		System.out.println("look "+ dd +" "+ hashing.hash("wwwjdcom11534"));
+		ShardPolicy<MyShard> shardPolicy = shardPolicyFactory.createShardPolicy(myShards, hashing);
+		MyShard shard = shardPolicy.getShardInfo(SafeEncoder.encode("wwwjdcom"));
+		System.out.println("look "+ shard.getName() +" "+ hashing.hash("wwwjdcom"));
 
 	}
+	
+}
+
+class MyShard implements ShardInfo {
+
+	private String name;
+	
+	public MyShard(String name) {
+		super();
+		this.name = name;
+	}
+	
+	@Override
+	public int getWeight() {
+		return 1;
+	}
+
+	@Override
+	public String getName() {
+		return this.name;
+	}
+	
 }
